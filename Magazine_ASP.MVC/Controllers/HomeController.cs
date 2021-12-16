@@ -1,4 +1,6 @@
 ﻿using Magazine_ASP.MVC.Models;
+using Magazine_ASP.MVC.Services;
+using Magazine_ASP.MVC.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +9,22 @@ namespace Magazine_ASP.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly NewsService _service;
 
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            _service = new NewsService();
         }
 
         public IActionResult Index()
         {
-            return View();
+            var model = new TopNewsViewModel
+            {
+                LastestNews = _service.GetLastestNews(4),
+                TopNews = _service.GetTopNews(4)
+            };
+            return View(model);
         }
 
         public IActionResult Privacy()

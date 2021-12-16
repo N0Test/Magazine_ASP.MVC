@@ -1,0 +1,24 @@
+﻿@model TopNewsViewModel
+
+<div class="top-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 tn-left">
+                <div class="row tn-slider">
+                    @foreach (var news in @Model.LastestNews)
+                    {
+                        @Html.Partial("_TopNewsItem", news)
+                    }
+                </div>
+            </div>
+            <div class="col-md-6 tn-right">
+                <div class="row">
+                    @foreach (var news in @Model.TopNews)
+                    {
+                        @Html.Partial("_TopNewsItem", news)
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
