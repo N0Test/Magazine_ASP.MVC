@@ -1,7 +1,10 @@
+using Magazine_ASP.MVC.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<INewsService, NewsService>();
 
 var app = builder.Build();
 

@@ -9,12 +9,12 @@ namespace Magazine_ASP.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly NewsService _service;
+        private readonly INewsService _service;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, INewsService service)
         {
             _logger = logger;
-            _service = new NewsService();
+            _service = service;
         }
 
         public IActionResult Index()

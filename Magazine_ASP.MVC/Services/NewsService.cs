@@ -2,7 +2,7 @@
 
 namespace Magazine_ASP.MVC.Services
 {
-    public class NewsService
+    public class NewsService : INewsService
     {
         private IList<NewsModel> _news;
 
