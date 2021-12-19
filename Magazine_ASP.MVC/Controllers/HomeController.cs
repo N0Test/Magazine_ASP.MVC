@@ -21,7 +21,7 @@ namespace Magazine_ASP.MVC.Controllers
         {
             ViewData["SearchQuery"] = q;
 
-            var model = _service.GetHomePageNews();
+            var model = _service.GetHomePageNewsViewModel(4, 20, DateTime.Now.AddDays(-5));
             return View(model);
         }
 

@@ -1,0 +1,35 @@
+﻿@model MainNewsViewModel
+
+<div class="main-news">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="row">
+                    @foreach (var news in @Model.MainNews)
+                    {
+                        <div class="col-md-4">
+                            <div class="mn-img">
+                                <img src=@news.Image />
+                                <div class="mn-title">
+                                    <a href="">@news.Title</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="col-lg-3">
+                <div class="mn-list">
+                    <h2>Read More</h2>
+                    <ul>
+                        @foreach (var shortNews in @Model.ShortMainNews)
+                        {
+                            <li><a href="">@shortNews.Title</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

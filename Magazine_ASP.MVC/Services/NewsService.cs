@@ -3,7 +3,7 @@ using Magazine_ASP.MVC.ViewModel;
 
 namespace Magazine_ASP.MVC.Services
 {
-    public class NewsService : INewsService, ITopNewsService, ICategoryService, IHomePageNewsService
+    public class NewsService : INewsService, ITopNewsService, ICategoryNewsService, IMainNewsService, IHomePageNewsService, IShortNewsService
     {
         private IList<NewsModel> _news;
 
@@ -28,7 +28,7 @@ namespace Magazine_ASP.MVC.Services
         public IList<NewsModel> GetAllNews() => _news;
         public NewsModel GetNewsById(int id) => _news.FirstOrDefault(news => news.Id == id);
         public IList<NewsModel> GetNewsByTag(NewsTag tag) => _news.Where(news => news.Tag == tag).ToList();
-        public IList<NewsModel> GetNewsByDate(DateTime date) => _news.Where(news => news.Date.CompareTo(date) == 0).ToList();
+        public IList<NewsModel> GetNewsAfterDate(DateTime date) => _news.Where(news => news.Date.CompareTo(date) >= 0).ToList();
         public IList<NewsModel> GetLastestNews(int count)
         {
             var result = _news.ToList();
@@ -42,26 +42,27 @@ namespace Magazine_ASP.MVC.Services
             return result.Take(count).ToList();
         }
 
-        public HomePageNewsViewModel GetHomePageNews()
+        public HomePageNewsViewModel GetHomePageNewsViewModel(int topNewsCount, int shortNewsCount, DateTime date)
         {
             var homePageNews = new HomePageNewsViewModel
             {
-                TopNews = GetTopNews(),
-                CategoryNews = GetCategoryNews()
+                TopNews = GetTopNewsViewModel(topNewsCount),
+                CategoryNews = GetCategoryNewsViewModel(),
+                MainNews = GetMainNewsViewModel(date, shortNewsCount)
             };
             return homePageNews;
         }
 
-        public TopNewsViewModel GetTopNews()
+        public TopNewsViewModel GetTopNewsViewModel(int newsCount)
         {
             return new TopNewsViewModel
             {
-                LastestNews = GetLastestNews(4),
-                TopNews = GetTopNews(4)
+                LastestNews = GetLastestNews(newsCount),
+                TopNews = GetTopNews(newsCount)
             };
         }
 
-        public CategoryNewsViewModel GetCategoryNews()
+        public CategoryNewsViewModel GetCategoryNewsViewModel()
         {
             var categoryNews = new CategoryNewsViewModel
             {
@@ -72,6 +73,20 @@ namespace Magazine_ASP.MVC.Services
                 categoryNews.CategoryNews.Add((NewsTag)i, GetNewsByTag((NewsTag)i));
             }
             return categoryNews;
+        }
+
+        public MainNewsViewModel GetMainNewsViewModel(DateTime date, int count)
+        {
+            return new MainNewsViewModel
+            {
+                MainNews = GetNewsAfterDate(date).ToList(),
+                ShortMainNews = GetShortNewsModelAfterDate(date, count).ToList()
+            };
+        }
+
+        public IList<ShortNewsModel> GetShortNewsModelAfterDate(DateTime date, int count)
+        {
+            return GetNewsAfterDate(date).Take(count).Select(news => new ShortNewsModel { Id = news.Id, Title = news.Title }).ToList();
         }
     }
 }

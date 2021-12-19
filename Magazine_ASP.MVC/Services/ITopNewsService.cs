@@ -4,6 +4,6 @@ namespace Magazine_ASP.MVC.Services
 {
     public interface ITopNewsService
     {
-        public TopNewsViewModel GetTopNews();
+        public TopNewsViewModel GetTopNewsViewModel(int newsCount);
     }
 }

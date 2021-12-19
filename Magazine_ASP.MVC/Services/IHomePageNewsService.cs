@@ -4,6 +4,6 @@ namespace Magazine_ASP.MVC.Services
 {
     public interface IHomePageNewsService
     {
-        public HomePageNewsViewModel GetHomePageNews();
+        public HomePageNewsViewModel GetHomePageNewsViewModel(int topNewsCount, int shortNewsCount, DateTime date);
     }
 }
