@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
         public NewsModel News { get; set; }
-        public KeyValuePair<string, IList<string>> Details { get; set; }
+        public IList<string> Details { get; set; }
     }
 }
