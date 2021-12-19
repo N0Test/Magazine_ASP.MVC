@@ -11,7 +11,7 @@
                             <div class="mn-img">
                                 <img src=@news.Image />
                                 <div class="mn-title">
-                                    <a href="">@news.Title</a>
+                                    <a href="/home/details/@news.Id">@news.Title</a>
                                 </div>
                             </div>
                         </div>
@@ -25,7 +25,7 @@
                     <ul>
                         @foreach (var shortNews in @Model.ShortMainNews)
                         {
-                            <li><a href="">@shortNews.Title</a></li>
+                            <li><a href="/home/details/@shortNews.Id">@shortNews.Title</a></li>
                         }
                     </ul>
                 </div>

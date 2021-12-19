@@ -25,6 +25,12 @@ namespace Magazine_ASP.MVC.Controllers
             return View(model);
         }
 
+        public IActionResult Details(int id)
+        {
+            var model = _service.GetDetailsNews(id);
+            return View(model);
+        }
+
         public IActionResult Privacy()
         {
             return View();
