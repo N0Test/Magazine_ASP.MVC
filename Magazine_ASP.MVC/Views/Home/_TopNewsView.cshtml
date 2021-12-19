@@ -1,0 +1,10 @@
+﻿@model TopNewsViewModel
+
+<div class="top-news">
+    <div class="container">
+        <div class="row">
+            @Html.Partial("_LastestNews", Model.LastestNews)
+            @Html.Partial("_TopNews", Model.TopNews)
+        </div>
+    </div>
+</div>

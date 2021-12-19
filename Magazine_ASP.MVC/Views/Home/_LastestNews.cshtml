@@ -1,7 +1,7 @@
 ﻿@model IList<NewsModel>
 
-<div class="col-md-6 tn-right">
-    <div class="row">
+<div class="col-md-6 tn-left">
+    <div class="row tn-slider">
         @foreach (var news in @Model)
         {
             @Html.Partial("_TopNewsItem", news)

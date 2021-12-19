@@ -9,21 +9,19 @@ namespace Magazine_ASP.MVC.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly INewsService _service;
+        private readonly IHomePageNewsService _service;
 
-        public HomeController(ILogger<HomeController> logger, INewsService service)
+        public HomeController(ILogger<HomeController> logger, IHomePageNewsService service)
         {
             _logger = logger;
             _service = service;
         }
 
-        public IActionResult Index()
+        public IActionResult Index([FromQuery] string q)
         {
-            var model = new TopNewsViewModel
-            {
-                LastestNews = _service.GetLastestNews(4),
-                TopNews = _service.GetTopNews(4)
-            };
+            ViewData["SearchQuery"] = q;
+
+            var model = _service.GetHomePageNews();
             return View(model);
         }
 

@@ -9,13 +9,4 @@
         public NewsTag Tag { get; set; } = NewsTag.None;
         public int ViewsCount { get; set; } = 0;
     }
-
-    public enum NewsTag
-    {
-        None,
-        Sports,
-        Businessm,
-        Technology,
-        Entertainment,
-    }
 }

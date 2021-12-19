@@ -1,8 +1,9 @@
 ﻿using Magazine_ASP.MVC.Models;
+using Magazine_ASP.MVC.ViewModel;
 
 namespace Magazine_ASP.MVC.Services
 {
-    public class NewsService : INewsService
+    public class NewsService : INewsService, ITopNewsService, ICategoryService, IHomePageNewsService
     {
         private IList<NewsModel> _news;
 
@@ -10,7 +11,7 @@ namespace Magazine_ASP.MVC.Services
         {
             _news = new List<NewsModel>();
             
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 25; i++)
             {
                 var newsModel = new NewsModel();
                 newsModel.Id = i;
@@ -39,6 +40,38 @@ namespace Magazine_ASP.MVC.Services
             var result = _news.ToList();
             result.Sort((prev, cur) => cur.ViewsCount.CompareTo(prev.ViewsCount));
             return result.Take(count).ToList();
+        }
+
+        public HomePageNewsViewModel GetHomePageNews()
+        {
+            var homePageNews = new HomePageNewsViewModel
+            {
+                TopNews = GetTopNews(),
+                CategoryNews = GetCategoryNews()
+            };
+            return homePageNews;
+        }
+
+        public TopNewsViewModel GetTopNews()
+        {
+            return new TopNewsViewModel
+            {
+                LastestNews = GetLastestNews(4),
+                TopNews = GetTopNews(4)
+            };
+        }
+
+        public CategoryNewsViewModel GetCategoryNews()
+        {
+            var categoryNews = new CategoryNewsViewModel
+            {
+                CategoryNews = new Dictionary<NewsTag, IList<NewsModel>>()
+            };
+            for (int i = 1; i < Enum.GetValues(typeof(NewsTag)).Length; i++)
+            {
+                categoryNews.CategoryNews.Add((NewsTag)i, GetNewsByTag((NewsTag)i));
+            }
+            return categoryNews;
         }
     }
 }
