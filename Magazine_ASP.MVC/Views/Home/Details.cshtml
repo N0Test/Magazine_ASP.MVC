@@ -10,6 +10,8 @@
                     </div>
                     <div class="sn-content">
                         <h1 class="sn-title">@Model.News.Title</h1>
+                        <a asp-action="edit" asp-route-id=@Model.News.Id class="btn btn-warning">Edit</a>
+                        <a asp-action="delete" asp-route-id=@Model.News.Id class="btn btn-danger">Delete</a>
                         @foreach (var paragraps in @Model.Details)
                         {
                             <p>@paragraps</p>

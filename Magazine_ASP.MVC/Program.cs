@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IHomePageNewsService, NewsService>();
+builder.Services.AddSingleton<IHomePageNewsService, NewsService>();
 
 var app = builder.Build();
 

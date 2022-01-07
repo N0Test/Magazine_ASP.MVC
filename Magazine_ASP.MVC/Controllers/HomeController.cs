@@ -41,5 +41,74 @@ namespace Magazine_ASP.MVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Create()
+        {
+            return View(new NewsModel());
+        }
+
+        [HttpPost]
+        public IActionResult Create([FromForm] NewsModel model)
+        {
+            var newNews = _service.CreateOrUpdate(model);
+
+            if (newNews != null)
+            {
+                return RedirectToAction("Index", new { id = newNews.Id });
+            }
+
+            return View(model);
+        }
+
+        public IActionResult Edit(int id)
+        {
+            var news = _service.GetNewsById(id);
+
+            if (news == null) return NotFound();
+
+            return View(news);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, [FromForm] NewsModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Перевірте правильність внесених даних");
+
+                return View(model);
+            }
+
+            var newNews = _service.CreateOrUpdate(model);
+
+            if (newNews != null)
+            {
+                return RedirectToAction("Index", new { id });
+            }
+
+            return View(model);
+        }
+
+        public ActionResult Delete(int id)
+        {
+            var news = _service.GetNewsById(id);
+
+            if (news == null) return NotFound();
+
+            return View(news);
+        }
+
+        [HttpPost]
+        public ActionResult Delete(int id, NewsModel model)
+        {
+            try
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

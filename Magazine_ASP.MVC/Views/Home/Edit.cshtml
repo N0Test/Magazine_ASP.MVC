@@ -1,0 +1,21 @@
+﻿@model Magazine_ASP.MVC.Models.NewsModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container">
+    <h4>Edit News</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                @Html.Partial("_create_or_update", Model)
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

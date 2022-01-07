@@ -7,5 +7,7 @@ namespace Magazine_ASP.MVC.Services
     {
         public HomePageNewsViewModel GetHomePageNewsViewModel(int topNewsCount, int shortNewsCount, DateTime date);
         public NewsDetailsModel GetDetailsNews(int id);
+        NewsModel CreateOrUpdate(NewsModel model);
+        NewsModel GetNewsById(int id);
     }
 }

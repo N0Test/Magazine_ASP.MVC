@@ -17,7 +17,6 @@ namespace Magazine_ASP.MVC.Services
                 newsModel.Id = i;
                 newsModel.Date = DateTime.Now.AddDays(Random.Shared.Next(-5, 0));
                 newsModel.Title = $"#{newsModel.Id} Title";
-                newsModel.Image = $"img/news-350x223-{1 + (newsModel.Id % 5)}.jpg";
                 newsModel.Tag = (NewsTag)Random.Shared.Next(1, 5);
                 newsModel.ViewsCount = Random.Shared.Next(100, 1000);
                 _news.Add(newsModel);
@@ -103,5 +102,27 @@ namespace Magazine_ASP.MVC.Services
             };
             return result;
         }
+        public NewsModel CreateOrUpdate(NewsModel model)
+        {
+            if (model.Id == default)
+            {
+                model.Id = _news.Count;
+                _news.Add(model);
+                return model;
+            }
+
+            try
+            {
+                _news[model.Id] = model;
+
+            }
+            catch (Exception)
+            {
+                return null;
+                //throw new Exception("Not found");
+            }
+            return model;
+        }
+
     }
 }
