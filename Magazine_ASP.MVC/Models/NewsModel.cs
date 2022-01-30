@@ -9,7 +9,7 @@ namespace Magazine_ASP.MVC.Models
         [StringLength(20, MinimumLength = 3, ErrorMessage = "максимум 20 символів")]
         [RegularExpression(@"[A-Za-z0-9 ]+", ErrorMessage = "Тільки латинські букви")]
         public string Title { get; set; }
-        public string Image { get => $"img/news-350x223-{1 + (Id % 5)}.jpg"; }
+        public string Image { get; set; }
         [DisplayName("Publish date")]
         public DateTime Date { get; set; }
         [DisplayName("News Tag")]

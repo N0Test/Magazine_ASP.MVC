@@ -1,42 +1,44 @@
-﻿using Magazine_ASP.MVC.Models;
+﻿using Magazine_ASP.MVC.DAL;
+using Magazine_ASP.MVC.Models;
+using Magazine_ASP.MVC.Services.Mapper;
 using Magazine_ASP.MVC.ViewModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace Magazine_ASP.MVC.Services
 {
     public class NewsService : INewsService, ITopNewsService, ICategoryNewsService, IMainNewsService, IHomePageNewsService, IShortNewsService
     {
-        private IList<NewsModel> _news;
+        private readonly ApplicationDBContext _dbContext;
 
-        public NewsService()
+        public IList<NewsModel> News
         {
-            _news = new List<NewsModel>();
-            
-            for (int i = 0; i < 25; i++)
+            get
             {
-                var newsModel = new NewsModel();
-                newsModel.Id = i;
-                newsModel.Date = DateTime.Now.AddDays(Random.Shared.Next(-5, 0));
-                newsModel.Title = $"#{newsModel.Id} Title";
-                newsModel.Tag = (NewsTag)Random.Shared.Next(1, 5);
-                newsModel.ViewsCount = Random.Shared.Next(100, 1000);
-                _news.Add(newsModel);
+                return _dbContext.News
+                    .Include(x => x.ImageItem)
+                    .Select(NewsMapper.Create).ToList();
             }
+        }
+
+        public NewsService(ApplicationDBContext dBContext)
+        {
+            _dbContext = dBContext;
 
         }
 
-        public IList<NewsModel> GetAllNews() => _news;
-        public NewsModel GetNewsById(int id) => _news.FirstOrDefault(news => news.Id == id);
-        public IList<NewsModel> GetNewsByTag(NewsTag tag) => _news.Where(news => news.Tag == tag).ToList();
-        public IList<NewsModel> GetNewsAfterDate(DateTime date) => _news.Where(news => news.Date.CompareTo(date) >= 0).ToList();
+        public IList<NewsModel> GetAllNews() => News;
+        public NewsModel GetNewsById(int id) => NewsMapper.Create(_dbContext.News.Include(x => x.ImageItem).FirstOrDefault(x => x.Id == id));
+        public IList<NewsModel> GetNewsByTag(NewsTag tag) => _dbContext.News.Where(news => news.Tag == tag).Select(NewsMapper.Create).ToList();
+        public IList<NewsModel> GetNewsAfterDate(DateTime date) => _dbContext.News.Where(news => news.Date.CompareTo(date) >= 0).Select(NewsMapper.Create).ToList();
         public IList<NewsModel> GetLastestNews(int count)
         {
-            var result = _news.ToList();
+            var result = News.ToList();
             result.Sort((prev, cur) => cur.Date.CompareTo(prev.Date));
             return result.Take(count).ToList();
         }
         public IList<NewsModel> GetTopNews(int count)
         {
-            var result = _news.ToList();
+            var result = News.ToList();
             result.Sort((prev, cur) => cur.ViewsCount.CompareTo(prev.ViewsCount));
             return result.Take(count).ToList();
         }
@@ -106,14 +108,15 @@ namespace Magazine_ASP.MVC.Services
         {
             if (model.Id == default)
             {
-                model.Id = _news.Count;
-                _news.Add(model);
-                return model;
+                var entity = NewsMapper.Create(model);
+                entity.Id = _dbContext.News.Count()+1;
+                _dbContext.News.Add(entity);
+                return NewsMapper.Create(entity);
             }
 
             try
             {
-                _news[model.Id] = model;
+                News[model.Id] = model;
 
             }
             catch (Exception)

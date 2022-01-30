@@ -1,10 +1,17 @@
+using Magazine_ASP.MVC.DAL;
 using Magazine_ASP.MVC.Services;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationDBContext>(options =>
+    options.UseSqlServer(connectionString)
+);
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IHomePageNewsService, NewsService>();
+builder.Services.AddScoped<IHomePageNewsService, NewsService>();
 
 var app = builder.Build();
 
