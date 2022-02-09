@@ -1,3 +1,4 @@
+using Azure.Storage.Blobs;
 using Magazine_ASP.MVC.DAL;
 using Magazine_ASP.MVC.Services;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,11 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IHomePageNewsService, NewsService>();
+
+var blobConnectionString = builder.Configuration.GetConnectionString("BlobStorageConnection");
+builder.Services.AddSingleton(x => new BlobServiceClient(blobConnectionString));
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IImageDALService, ImageDALService>();
 
 var app = builder.Build();
 

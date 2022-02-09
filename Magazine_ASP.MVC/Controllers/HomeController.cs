@@ -1,5 +1,6 @@
 ﻿using Magazine_ASP.MVC.Models;
 using Magazine_ASP.MVC.Services;
+using Magazine_ASP.MVC.Services.Mapper;
 using Magazine_ASP.MVC.ViewModel;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -10,11 +11,13 @@ namespace Magazine_ASP.MVC.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHomePageNewsService _service;
+        private readonly IImageDALService _imageService;
 
-        public HomeController(ILogger<HomeController> logger, IHomePageNewsService service)
+        public HomeController(ILogger<HomeController> logger, IHomePageNewsService service, IImageDALService imageService)
         {
             _logger = logger;
             _service = service;
+            _imageService = imageService;
         }
 
         public IActionResult Index([FromQuery] string q)
@@ -42,14 +45,20 @@ namespace Magazine_ASP.MVC.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            var imageList = (await _imageService.GetList()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
+
             return View(new NewsModel());
         }
 
         [HttpPost]
-        public IActionResult Create([FromForm] NewsModel model)
+        public async Task<IActionResult> Create([FromForm] NewsModel model)
         {
+            var imageList = (await _imageService.GetList()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
+
             var newNews = _service.CreateOrUpdate(model);
 
             if (newNews != null)
@@ -60,8 +69,11 @@ namespace Magazine_ASP.MVC.Controllers
             return View(model);
         }
 
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            var imageList = (await _imageService.GetList()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
+
             var news = _service.GetNewsById(id);
 
             if (news == null) return NotFound();
@@ -70,14 +82,17 @@ namespace Magazine_ASP.MVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(int id, [FromForm] NewsModel model)
+        public async Task<IActionResult> Edit(int id, [FromForm] NewsModel model)
         {
-            if (!ModelState.IsValid)
-            {
-                ModelState.AddModelError("", "Перевірте правильність внесених даних");
+            var imageList = (await _imageService.GetList()).Select(ImagesMapper.Create).ToList();
+            ViewData["ImageList"] = imageList;
 
-                return View(model);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    ModelState.AddModelError("", "Перевірте правильність внесених даних");
+
+            //    return View(model);
+            //}
 
             var newNews = _service.CreateOrUpdate(model);
 

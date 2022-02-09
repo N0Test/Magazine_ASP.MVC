@@ -10,6 +10,7 @@ namespace Magazine_ASP.MVC.Models
         [RegularExpression(@"[A-Za-z0-9 ]+", ErrorMessage = "Тільки латинські букви")]
         public string Title { get; set; }
         public string Image { get; set; }
+        public int? ImageId { get; set; }
         [DisplayName("Publish date")]
         public DateTime Date { get; set; }
         [DisplayName("News Tag")]

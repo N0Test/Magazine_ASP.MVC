@@ -16,6 +16,7 @@ namespace Magazine_ASP.MVC.Services.Mapper
             {
                 Id = entity.Id,
                 Image = imageUrl,
+                ImageId = entity.ImageId,
                 Date = entity.Date,
                 Tag = entity.Tag,
                 Title = entity.Title,
